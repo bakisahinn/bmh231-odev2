@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kampüs Etkinlik Panosu</title>
+  <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">Bozok Etkinlik</div>
+    <nav>
+      <a href="#pano">Etkinlikler</a>
+      <a href="#oner">Etkinlik Öner</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="pano">
+      <h1>Kampüs Etkinlikleri</h1>
+      
+      <!-- Filtre ve Arama Alanı (Bölüm C2) -->
+      <div class="filtre-alanı">
+        <div class="butonlar">
+          <button class="aktif-filtre" data-tur="tumu">Tümü</button>
+          <button data-tur="atolye">Atölye</button>
+          <button data-tur="soylesi">Söyleşi</button>
+          <button data-tur="topluluk">Topluluk</button>
+        </div>
+        <div class="arama">
+          <input type="text" id="aramaKutusu" placeholder="Etkinlik ara (örn. Web, Git)...">
+        </div>
+      </div>
+
+      <!-- Etkinlik Kartlarının Listeleneceği Alan -->
+      <div id="etkinlikListesi" class="kartlar">
+        <p id="yukleniyorMesaji">Yükleniyor...</p>
+      </div>
+    </section>
+
+    <!-- Etkinlik Öner Formu (Bölüm C3) -->
+    <section id="oner">
+      <h2>Etkinlik Öner</h2>
+      <form id="etkinlikFormu">
+        <div class="form-grup">
+          <label for="baslikInput">Etkinlik Adı:</label>
+          <input type="text" id="baslikInput" name="baslik">
+        </div>
+
+        <div class="form-grup">
+          <label for="tarihInput">Etkinlik Tarihi:</label>
+          <input type="date" id="tarihInput" name="tarih">
+        </div>
+
+        <div class="form-grup">
+          <label for="epostaInput">E-posta Adresiniz:</label>
+          <input type="email" id="epostaInput" name="eposta">
+        </div>
+
+        <button type="submit">Öneri Gönder</button>
+        <p id="formMesaj" class="mesaj"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Bozok Etkinlik - Bilgisayar Mühendisliği</p>
+  </footer>
+
+  <script src="betik.js"></script>
+</body>
+</html>
