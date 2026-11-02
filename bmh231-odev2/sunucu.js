@@ -108,3 +108,4 @@ server.listen(PORT, () => {
   console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor...`);
 });
 // Sunucu konfigürasyonu güncellendi
+// Ek protokoller
