@@ -1,0 +1,307 @@
+/* 1. CSS Değişkenleri ve Temel Ayarlar (Bölüm B2) */
+:root {
+  --birincil-renk: #003366;
+  --ikincil-renk: #0066cc;
+  --arkaplan-renk: #f4f7f6;
+  --kart-arkaplan: #ffffff;
+  --yazi-renk: #333333;
+  --hata-renk: #d9534f;
+  --basari-renk: #5cb85c;
+  --font-aile: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-aile);
+  background-color: var(--arkaplan-renk);
+  color: var(--yazi-renk);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 2. Header ve Navigasyon (Flexbox - Bölüm B2) */
+header {
+  background-color: var(--birincil-renk);
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 500;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+/* 3. Ana İçerik ve Yerleşim */
+main {
+  flex: 1;
+  max-width: 1100px;
+  width: 90%;
+  margin: 2rem auto;
+}
+
+section {
+  background: var(--kart-arkaplan);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+h1, h2 {
+  color: var(--birincil-renk);
+  margin-bottom: 1.5rem;
+}
+
+/* 4. Filtre ve Arama Alanı (Flexbox - Bölüm B2) */
+.filtre-alanı {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.butonlar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.butonlar button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ikincil-renk);
+  background-color: transparent;
+  color: var(--ikincil-renk);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.butonlar button.aktif-filtre,
+.butonlar button:hover {
+  background-color: var(--ikincil-renk);
+  color: #fff;
+}
+
+.arama input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 250px;
+}
+
+/* 5. Etkinlik Kartları Listesi (CSS Grid - Bölüm B2) */
+.kartlar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.etkinlik-karti {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 1.25rem;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.etkinlik-karti h3 {
+  color: var(--birincil-renk);
+  margin-bottom: 0.5rem;
+}
+
+.etkinlik-karti p {
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.etkinlik-karti .etiket {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 0.8rem;
+  text-transform: uppercase;
+}
+
+.etiket-atolye { background-color: #e3f2fd; color: #0d47a1; }
+.etiket-soylesi { background-color: #f3e5f5; color: #4a148c; }
+.etiket-topluluk { background-color: #e8f5e9; color: #1
+cat << 'EOF' > public/betik.js
+document.addEventListener("DOMContentLoaded", () => {
+  const etkinlikListesi = document.getElementById("etkinlikListesi");
+  const yukleniyorMesaji = document.getElementById("yukleniyorMesaji");
+  const aramaKutusu = document.getElementById("aramaKutusu");
+  const filtreButonlari = document.querySelectorAll(".butonlar button");
+  
+  const etkinlikFormu = document.getElementById("etkinlikFormu");
+  const formMesaj = document.getElementById("formMesaj");
+  
+  let tumEtkinlikler = [];
+  let aktifTur = "tumu";
+  let aramaMetni = "";
+
+  // D2: fetch ve async/await ile verileri API'den çekme
+  async function etkinlikleriGetir() {
+    try {
+      if (yukleniyorMesaji) {
+        yukleniyorMesaji.style.display = "block";
+      }
+      
+      const yanit = await fetch("/api/etkinlikler");
+      
+      if (!yanit.ok) {
+        throw new Error(`Sunucu hatası: ${yanit.status}`);
+      }
+      
+      tumEtkinlikler = await yanit.json();
+      etkinlikleriCiz();
+    } catch (hata) {
+      console.error("Veri çekme hatası:", hata);
+      etkinlikListesi.innerHTML = `<p class="mesaj hata">Etkinlikler yüklenirken bir hata oluştu: ${hata.message}. Sunucunun çalıştığından emin olun.</p>`;
+    }
+  }
+
+  // C1 & C2: Kartları DOM'a güvenli şekilde çizme (createElement, textContent, append) ve filtreleme
+  function etkinlikleriCiz() {
+    etkinlikListesi.innerHTML = "";
+
+    // Filtreleme ve Arama mantığının birlikte çalışması
+    const filtrelenmis = tumEtkinlikler.filter(etkinlik => {
+      const turUyumu = (aktifTur === "tumu") || (etkinlik.tur === aktifTur);
+      const aramaUyumu = etkinlik.baslik.toLowerCase().includes(aramaMetni.toLowerCase());
+      return turUyumu && aramaUyumu;
+    });
+
+    if (filtrelenmis.length === 0) {
+      const bosMesaj = document.createElement("p");
+      bosMesaj.textContent = "Aramanıza uygun etkinlik yok.";
+      etkinlikListesi.appendChild(bosMesaj);
+      return;
+    }
+
+    filtrelenmis.forEach(etkinlik => {
+      const kart = document.createElement("div");
+      kart.className = "etkinlik-karti";
+
+      const baslik = document.createElement("h3");
+      baslik.textContent = etkinlik.baslik;
+
+      const tarihP = document.createElement("p");
+      // Türkçe tarih biçimlendirme (toLocaleDateString)
+      const formatliTarih = new Date(etkinlik.tarih).toLocaleDateString("tr-TR");
+      tarihP.textContent = `Tarih: ${formatliTarih}`;
+
+      const yerP = document.createElement("p");
+      yerP.textContent = `Yer: ${etkinlik.yer}`;
+
+      const kontenjanP = document.createElement("p");
+      kontenjanP.textContent = `Kontenjan: ${etkinlik.kontenjan}`;
+
+      const etiketSpan = document.createElement("span");
+      etiketSpan.className = `etiket etiket-${etkinlik.tur}`;
+      etiketSpan.textContent = etkinlik.tur.toUpperCase();
+
+      kart.appendChild(baslik);
+      kart.appendChild(tarihP);
+      kart.appendChild(yerP);
+      kart.appendChild(kontenjanP);
+      kart.appendChild(etiketSpan);
+
+      etkinlikListesi.appendChild(kart);
+    });
+  }
+
+  // C2: Filtre butonları olay dinleyicisi
+  filtreButonlari.forEach(buton => {
+    buton.addEventListener("click", (e) => {
+      filtreButonlari.forEach(b => b.classList.remove("aktif-filtre"));
+      e.target.classList.add("aktif-filtre");
+      aktifTur = e.target.getAttribute("data-tur");
+      etkinlikleriCiz();
+    });
+  });
+
+  // C2: Arama kutusu olay dinleyicisi (input olayı)
+  aramaKutusu.addEventListener("input", (e) => {
+    aramaMetni = e.target.value.trim();
+    etkinlikleriCiz();
+  });
+
+  // C3: Form doğrulama (Validation)
+  etkinlikFormu.addEventListener("submit", (e) => {
+    e.preventDefault();
+    formMesaj.textContent = "";
+    formMesaj.className = "mesaj";
+
+    const baslikVal = document.getElementById("baslikInput").value.trim();
+    const tarihVal = document.getElementById("tarihInput").value;
+    const epostaVal = document.getElementById("epostaInput").value.trim();
+
+    // 1. Ad en az 5 karakter olmalı
+    if (baslikVal.length < 5) {
+      formMesaj.textContent = "Etkinlik adı en az 5 karakter olmalıdır.";
+      formMesaj.classList.add("hata");
+      return;
+    }
+
+    // 2. Tarih boş ya da geçmiş bir gün olamaz
+    if (!tarihVal) {
+      formMesaj.textContent = "Lütfen bir tarih seçiniz.";
+      formMesaj.classList.add("hata");
+      return;
+    }
+
+    const secilenTarih = new Date(tarihVal);
+    const bugun = new Date();
+    bugun.setHours(0, 0, 0, 0);
+
+    if (secilenTarih < bugun) {
+      formMesaj.textContent = "Geçmiş bir tarihe etkinlik önerilemez.";
+      formMesaj.classList.add("hata");
+      return;
+    }
+
+    // 3. E-posta geçerli biçimde olmalı
+    const epostaRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!epostaRegex.test(epostaVal)) {
+      formMesaj.textContent = "Lütfen geçerli bir e-posta adresi giriniz.";
+      formMesaj.classList.add("hata");
+      return;
+    }
+
+    // Başarılı durum
+    formMesaj.textContent = "Etkinlik öneriniz başarıyla alındı. Teşekkür ederiz!";
+    formMesaj.classList.add("basari");
+    etkinlikFormu.reset();
+  });
+
+  // Sayfa yüklendiğinde ilk veri çekme işlemi
+  etkinlikleriGetir();
+});
