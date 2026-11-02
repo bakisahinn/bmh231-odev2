@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "baslik": "Web Programlama Atölyesi",
+    "tur": "atolye",
+    "tarih": "2026-11-10",
+    "yer": "Bilgisayar Müh. Lab 1",
+    "kontenjan": 30
+  },
+  {
+    "id": 2,
+    "baslik": "Bozok Bilgisayar Topluluğu Tanışma Toplantısı",
+    "tur": "topluluk",
+    "tarih": "2026-11-12",
+    "yer": "Merkezi Derslikler Konferans Salonu",
+    "kontenjan": 120
+  },
+  {
+    "id": 3,
+    "baslik": "Yapay Zeka ve Büyük Dil Modelleri Söyleşisi",
+    "tur": "soylesi",
+    "tarih": "2026-11-15",
+    "yer": "Mühendislik Fakültesi Amfi B",
+    "kontenjan": 200
+  },
+  {
+    "id": 4,
+    "baslik": "Git ve GitHub Kullanım Atölyesi",
+    "tur": "atolye",
+    "tarih": "2026-11-18",
+    "yer": "Bilgisayar Müh. Lab 2",
+    "kontenjan": 25
+  },
+  {
+    "id": 5,
+    "baslik": "Kariyer Söyleşisi: Yazılım Sektöründe İlk Yıllar",
+    "tur": "soylesi",
+    "tarih": "2026-11-20",
+    "yer": "Erdogan Akdag Kongre Merkezi",
+    "kontenjan": 150
+  },
+  {
+    "id": 6,
+    "baslik": "Veri Bilimi ve Python Temelleri Atölyesi",
+    "tur": "atolye",
+    "tarih": "2026-11-22",
+    "yer": "Bilgisayar Müh. Lab 1",
+    "kontenjan": 30
+  }
+]
+// Veri modeli notları
